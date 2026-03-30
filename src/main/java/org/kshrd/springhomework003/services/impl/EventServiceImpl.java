@@ -61,20 +61,14 @@ public class EventServiceImpl implements EventService {
             throw new NotFoundExceptionHandler("Venue with ID " + eventRequest.getVenueId() + " not found");
         }
 
-        if (eventRequest.getAttendeeIds().size() > event.getAttendees().size()) {
-            for (Integer attendeeId : eventRequest.getAttendeeIds()) {
-                eventAttendeeRepository.saveAttendeeId(event.getEventId(), attendeeId);
-            }
-        } else {
-            for (int i = 0; i < event.getAttendees().size(); i++) {
-
-                eventAttendeeRepository.updateAttendeeId(
-                        event.getEventId(),
-                        event.getAttendees().get(i).getAttendeeId(),
-                        eventRequest.getAttendeeIds().get(i)
-                );
-            }
+        for (int i = 0; i < event.getAttendees().size(); i++) {
+            eventAttendeeRepository.updateAttendeeId(
+                    event.getEventId(),
+                    event.getAttendees().get(i).getAttendeeId(),
+                    eventRequest.getAttendeeIds().get(i)
+            );
         }
+
 
         return eventRepository.findEventById(event.getEventId());
     }
